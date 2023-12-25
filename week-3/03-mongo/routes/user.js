@@ -26,5 +26,3 @@ app.get("/purchasedCourses", userMiddleware, (req, res) => {
 });
 
 module.exports = router;
-
-module.exports = router;
