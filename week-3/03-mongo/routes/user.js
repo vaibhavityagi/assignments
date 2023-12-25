@@ -13,16 +13,18 @@ router.post("/signup", (req, res) => {
   });
 });
 
-router.get("/courses", (req, res) => {
+app.get("/courses", (req, res) => {
   // Implement listing all courses logic
 });
 
-router.post("/courses/:courseId", userMiddleware, (req, res) => {
+app.post("/courses/:courseId", userMiddleware, (req, res) => {
   // Implement course purchase logic
 });
 
-router.get("/purchasedCourses", userMiddleware, (req, res) => {
+app.get("/purchasedCourses", userMiddleware, (req, res) => {
   // Implement fetching purchased courses logic
 });
+
+module.exports = router;
 
 module.exports = router;
