@@ -4,6 +4,20 @@
 */
 
 function isPalindrome(str) {
+  const not = [" ", "!", "?", ",", "."];
+  str = str.toLowerCase();
+  const letters = str.split("");
+  str = "";
+  for (let i = 0; i < letters.length; i++) {
+    if (!not.includes(letters[i])) str += letters[i];
+  }
+
+  let copy = "";
+  for (let i = str.length - 1; i >= 0; i--) {
+    if (str[i] === " ") continue;
+    copy += str[i];
+  }
+  if (copy !== str) return false;
   return true;
 }
 
