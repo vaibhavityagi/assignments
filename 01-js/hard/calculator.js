@@ -21,7 +21,7 @@ class Calculator {
     this.result = 0;
   }
   add(x) {
-    this.reult += x;
+    this.result += x;
   }
   subtract(x) {
     this.result -= x;
@@ -30,6 +30,7 @@ class Calculator {
     this.result *= x;
   }
   divide(x) {
+    if (!x) throw new Error("Division by zero");
     this.result /= x;
   }
   clear() {

@@ -4,6 +4,7 @@
 */
 
 function isPalindrome(str) {
+  // sanitizing the provided string
   const not = [" ", "!", "?", ",", "."];
   str = str.toLowerCase();
   const letters = str.split("");
@@ -12,9 +13,9 @@ function isPalindrome(str) {
     if (!not.includes(letters[i])) str += letters[i];
   }
 
+  // copying the string
   let copy = "";
   for (let i = str.length - 1; i >= 0; i--) {
-    if (str[i] === " ") continue;
     copy += str[i];
   }
   if (copy !== str) return false;
