@@ -3,7 +3,7 @@ const router = Router();
 const userMiddleware = require("../middleware/user");
 const { User, Course } = require("../db");
 const jwt = require("jsonwebtoken");
-const secret = "badSecret";
+const { JWT_SECRET } = require("../config");
 
 // User Routes
 router.post("/signup", async (req, res) => {
@@ -15,8 +15,6 @@ router.post("/signup", async (req, res) => {
       username,
       password,
     });
-
-    console.log(newAdmin);
 
     res.status(200).json({
       message: "User created successfully",
@@ -32,7 +30,7 @@ router.post("/signin", async (req, res) => {
 
   const user = await User.findOne({ username, password });
   if (!user) return res.json({ messgase: "User doesn't exist" });
-  const token = jwt.sign({ username }, secret);
+  const token = jwt.sign({ username }, JWT_SECRET);
   res.json({ token });
 });
 
@@ -42,14 +40,29 @@ router.get("/courses", async (req, res) => {
 });
 
 router.post("/courses/:courseId", userMiddleware, async (req, res) => {
+  const username = req.username;
   const courseId = req.params.courseId;
-  const course = await Course.findById(courseId);
-  const user = await User.findById();
+
+  await User.updateOne(
+    { username },
+    {
+      $push: {
+        courses: courseId,
+      },
+    }
+  );
+  res.json({ message: "Successfully purchased the course" });
 });
 
 router.get("/purchasedCourses", userMiddleware, async (req, res) => {
-  const user = await User.findById();
-  res.send(user.courses);
+  const username = req.username;
+  const user = await User.findOne({ username });
+  const courses = await Course.find({
+    _id: {
+      $in: user.courses,
+    },
+  });
+  return res.json({ courses });
 });
 
 module.exports = router;

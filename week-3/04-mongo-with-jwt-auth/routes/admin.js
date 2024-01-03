@@ -1,9 +1,10 @@
-const { Router, application } = require("express");
+const { Router } = require("express");
 const adminMiddleware = require("../middleware/admin");
 const { Admin, Course } = require("../db/index");
 const jwt = require("jsonwebtoken");
-const secret = "badSecret";
 const router = Router();
+
+const { JWT_SECRET } = require("../config");
 
 // Admin Routes
 router.post("/signup", async (req, res) => {
@@ -31,8 +32,7 @@ router.post("/signin", async (req, res) => {
     return res.json({ message: "User doesn't exist" });
   }
 
-  // @ what to sign the token with? user password or a secret known to me
-  let token = jwt.sign({ username }, secret);
+  let token = jwt.sign({ username }, JWT_SECRET);
   return res.status(200).json({ token });
 });
 
