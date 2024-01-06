@@ -8,9 +8,19 @@
 
       function addTodoToDom() {}
 
-      function removeTodoFromDom(todo) {}
+      function removeTodoFromDom(todo) {
+        const element = document.getElementById(todo.id);
+        element.parentElement.removeChild(element);
+      }
 
-      function updateTodoInDom(oldTodo, newTodo) {}
+      function updateTodoInDom(oldTodo, newTodo) {
+        const element = document.getElementById(newTodo.id);
+        element.children[0].innerHTML = newTodo.title;
+        element.children[1].innerHTML = newTodo.description;
+        element.children[2].innerHTML = newTodo.completed
+          ? "Mark as done"
+          : "Done";
+      }
 
       function updateState(newTodos) {
         // calculate the diff b/w newTodos and oldTodos.
@@ -18,20 +28,21 @@
         // 1. added
         // 2. deleted
         // 3. updated
-        const added = [];
-        const deleted = [];
-        const updated = [];
-        // calculate these 3 arrays
-        // call addTodo, removeTodo, updateTodo functions on each of the
-        // elements
+        const added = newTodos.filter(
+          (newTodo) =>
+            !oldTodoState.some((oldTodo) => oldTodo.id === newTodo.id)
+        );
+        const deleted = oldTodoState.filter(
+          (oldTodo) => !newTodos.some((newTodo) => newTodo.id === oldTodo.id)
+        );
+        const updated = newTodos.filter((newTodo) =>
+          oldTodoState.some((oldTodo) => oldTodo.id === newTodo.id)
+        );
 
-        if (newTodos.length > oldTodoState.length) addTodoToDom();
-        else if (newTodos.length < oldTodoState.length) removeTodoFromDom();
-        else updateTodoInDom(oldTodoState, newTodos);
-
-        // for (let todo of newTodos) {
-        //   console.log(todo);
-        // }
+        // Call addTodo, removeTodo, updateTodo functions on each of the elements
+        added.forEach((newTodo) => addTodoElement(newTodo));
+        deleted.forEach((oldTodo) => removeTodoElement(oldTodo));
+        updated.forEach((newTodo) => updateTodoElement(newTodo));
 
         oldTodoState = newTodos;
       }
